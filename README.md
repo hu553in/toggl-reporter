@@ -11,13 +11,15 @@ but rewritten in Go for more customization and learning purposes.
 ## How to run
 
 1. Install `Go` (≥ 1.15)
-2. Run the following sequence of commands:
+2. Run `rm -rf $(go env GOPATH)/**/github.com/hu553in/toggl-reporter` in case
+if you want to reinstall the app (you may need elevated privileges)
+3. Run the following sequence of commands:
     ```
     $ go get github.com/hu553in/toggl-reporter
     $ go install github.com/hu553in/toggl-reporter
     # mv $(go env GOPATH)/bin/toggl-reporter /usr/local/bin/
     ```
-3. Run `toggl-reporter` with `--help` or some another CLI args
+4. Run `toggl-reporter` with `--help` or some another CLI args
 
 ## CLI args
 
