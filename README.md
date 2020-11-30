@@ -3,8 +3,7 @@
 ## Description
 
 This project is an app for creating custom daily reports
-based on data from Toggl.
-
+based on data from Toggl.\
 It is inspired by
 [senior-sigan/toggl-reporter](https://github.com/senior-sigan/toggl-reporter),
 but rewritten in Go for more customization and learning purposes.
