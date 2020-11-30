@@ -46,21 +46,20 @@ func formatMillis(millis int64) string {
 
 func getCurrentDate() string {
 	datetime := time.Now()
+	return getDateStringFromDatetime(datetime)
+}
+
+func getYesterdayDate() string {
+	datetime := time.Now().Add(time.Duration(-24) * time.Hour)
+	return getDateStringFromDatetime(datetime)
+}
+
+func getDateStringFromDatetime(datetime time.Time) string {
 	return fmt.Sprintf(
 		"%d-%d-%d",
 		datetime.Year(),
 		datetime.Month(),
 		datetime.Day(),
-	)
-}
-
-func getYesterdayDate() string {
-	datetime := time.Now()
-	return fmt.Sprintf(
-		"%d-%d-%d",
-		datetime.Year(),
-		datetime.Month(),
-		datetime.Day()-1,
 	)
 }
 
