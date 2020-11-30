@@ -22,7 +22,7 @@ but rewritten in Go for more customization and learning purposes.
 ## CLI args
 
 * `-token` - a Toggl API token (you can get it from your profile page)
-* `-workspaceId` - a workspace ID (you can get it by running the app
+* `-workspaceId` - a workspace ID (you can get the list of IDs by running the app
 with `-printWorkspaces` flag or just with `-token`)
 * `-date` - a report date (can be: `today`, `yesterday`, `YYYY-MM-DD`)
 (default `today`)
