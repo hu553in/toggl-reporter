@@ -23,7 +23,7 @@ but rewritten in Go for more customization and learning purposes.
 
 * `-token` - a Toggl API token (you can get it from your profile page)
 * `-workspaceId` - a workspace ID (you can get it by running the app
-with `-printWorkspaces` flag)
+with `-printWorkspaces` flag or just with `-token`)
 * `-date` - a report date (can be: `today`, `yesterday`, `YYYY-MM-DD`)
 (default `today`)
 * `-doNotMergeEqual` - do not merge tasks with equal descriptions
