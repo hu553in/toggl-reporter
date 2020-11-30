@@ -157,7 +157,8 @@ func main() {
 	workspaceID := flag.String(
 		"workspaceId",
 		"",
-		"Workspace ID (you can get it by running this app with \"-printWorkspaces\" flag)",
+		"Workspace ID (you can get it by running this app "+
+			"with \"-printWorkspaces\" flag or just with \"-token\")",
 	)
 	date := flag.String(
 		"date",
