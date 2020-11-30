@@ -161,7 +161,7 @@ func main() {
 	)
 	date := flag.String(
 		"date",
-		getCurrentDate(),
+		"today",
 		"Report date (can be: \"today\", \"yesterday\", \"YYYY-MM-DD\")",
 	)
 	doNotMergeEqual := flag.Bool(
