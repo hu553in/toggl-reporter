@@ -13,9 +13,9 @@ but rewritten in Go for more customization and learning purposes.
 1. Install `Go` (≥ 1.15)
 2. Run the following sequence of commands:
     ```
-    go get github.com/hu553in/toggl-reporter
-    go install github.com/hu553in/toggl-reporter
-    sudo mv $(go env GOPATH)/bin/toggl-reporter /usr/local/bin/
+    $ go get github.com/hu553in/toggl-reporter
+    $ go install github.com/hu553in/toggl-reporter
+    # mv $(go env GOPATH)/bin/toggl-reporter /usr/local/bin/
     ```
 3. Run `toggl-reporter` with `--help` or some another CLI args
 
