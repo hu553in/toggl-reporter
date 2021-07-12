@@ -44,7 +44,7 @@ func formatMillis(millis int64) string {
 	return fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
 }
 
-func getCurrentDate() string {
+func getTodayDate() string {
 	datetime := time.Now()
 	return getDateStringFromDatetime(datetime)
 }
@@ -56,29 +56,35 @@ func getYesterdayDate() string {
 
 func getDateStringFromDatetime(datetime time.Time) string {
 	return fmt.Sprintf(
-		"%d-%d-%d",
+		"%d-%02d-%02d",
 		datetime.Year(),
 		datetime.Month(),
 		datetime.Day(),
 	)
 }
 
-func processDate(date string) string {
+func processDate(date string) (string, error) {
 	dateLower := strings.ToLower(date)
 	if dateLower == "today" {
-		return getCurrentDate()
+		return getTodayDate(), nil
 	}
 	if dateLower == "yesterday" {
-		return getYesterdayDate()
+		return getYesterdayDate(), nil
 	}
-	return date
+	parsedDate, err := time.Parse(time.RFC3339, dateLower+"T00:00:00Z")
+	return getDateStringFromDatetime(parsedDate), err
 }
 
 func printReport(date string, report map[string]map[string]*Tags) {
-	fmt.Printf("================= Report for %s =================\n\n", date)
+	fmt.Printf(
+		"=========================================================\n\n"+
+			"Report for %s\n\n"+
+			"=========================================================\n\n",
+		date,
+	)
 	var total int64 = 0
 	if len(report) == 0 {
-		fmt.Print("There's no data to print.\n\n")
+		fmt.Print("There is no data to print.\n\n")
 	} else {
 		for project, projectData := range report {
 			fmt.Printf("++++++++ %s ++++++++\n\n", project)
@@ -97,7 +103,9 @@ func printReport(date string, report map[string]map[string]*Tags) {
 		}
 	}
 	fmt.Printf(
-		"=========================================================\n\nTotal: %s\n",
+		"=========================================================\n\n"+
+			"Total: %s\n\n"+
+			"=========================================================\n",
 		formatMillis(total),
 	)
 }
@@ -136,7 +144,8 @@ func composeReport(
 				}
 			}
 		}
-		if !contains(report[project][joinedTags].tasks, timeEntry.Description) || doNotMergeEqual {
+		if !contains(report[project][joinedTags].tasks, timeEntry.Description) ||
+			doNotMergeEqual {
 			report[project][joinedTags].tasks = append(
 				report[project][joinedTags].tasks,
 				timeEntry.Description,
@@ -175,9 +184,13 @@ func main() {
 		"Print workspaces instead of report",
 	)
 	flag.Parse()
-	processedDate := processDate(*date)
+	processedDate, err := processDate(*date)
+	if err != nil {
+		fmt.Println("Date is invalid. Re-run app with \"-h\" or \"--help\" flag.")
+		os.Exit(1)
+	}
 	if *token == "" {
-		fmt.Println("Invalid args. Re-run app with \"-h\" or \"--help\" flag.")
+		fmt.Println("Token is missing. Re-run app with \"-h\" or \"--help\" flag.")
 		os.Exit(1)
 	}
 	toggl.DisableLog()
@@ -203,7 +216,7 @@ func main() {
 	}
 	parsedWorkspaceID, err := strconv.Atoi(*workspaceID)
 	if err != nil {
-		fmt.Println("Invalid workspace ID.")
+		fmt.Println("Workspace ID is invalid.")
 		os.Exit(1)
 	}
 	page := 1
