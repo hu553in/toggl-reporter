@@ -23,10 +23,10 @@ in case if you want to reinstall the app (you may need elevated privileges)
 
 ## CLI args
 
-* `-token` - a Toggl API token (you can get it from your profile page)
-* `-workspaceId` - a workspace ID (you can get the list of IDs by running the app
-with `-printWorkspaces` flag or just with `-token`)
-* `-date` - a report date (can be: `today`, `yesterday`, `YYYY-MM-DD`)
+* `-date` — a report date (can be: `today`, `yesterday`, `YYYY-MM-DD`)
 (default `today`)
-* `-doNotMergeEqual` - do not merge tasks with equal descriptions
-* `-printWorkspaces` - print workspaces instead of the report
+* `-printWorkspaces` — print workspaces instead of the report
+* `-showDurationForEach` — show duration for each task
+* `-token` — a Toggl API token (you can get it from your profile page)
+* `-workspaceId` — a workspace ID (you can get the list of IDs by running the app
+with `-printWorkspaces` flag or just with `-token`)

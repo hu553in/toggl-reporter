@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"math"
 	"os"
-	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -14,24 +13,9 @@ import (
 	"github.com/jason0x43/go-toggl"
 )
 
-// Tags entity is collection of tasks tagged with them
-// along with their summary duration
-type Tags struct {
+type TagsData struct {
 	duration int64
-	tasks    []string
-}
-
-func contains(slice interface{}, item interface{}) bool {
-	reflectValue := reflect.ValueOf(slice)
-	if reflectValue.Kind() != reflect.Slice {
-		panic("Invalid data type.")
-	}
-	for i := 0; i < reflectValue.Len(); i++ {
-		if reflectValue.Index(i).Interface() == item {
-			return true
-		}
-	}
-	return false
+	tasks    map[string]int64
 }
 
 func formatMillis(millis int64) string {
@@ -75,7 +59,11 @@ func processDate(date string) (string, error) {
 	return getDateStringFromDatetime(parsedDate), err
 }
 
-func printReport(date string, report map[string]map[string]*Tags) {
+func printReport(
+	date string,
+	report map[string]map[string]*TagsData,
+	showDurationForEach bool,
+) {
 	fmt.Printf(
 		"=========================================================\n\n"+
 			"Report for %s\n\n"+
@@ -91,12 +79,20 @@ func printReport(date string, report map[string]map[string]*Tags) {
 			for tags, tagsData := range projectData {
 				total += tagsData.duration
 				fmt.Printf(
-					"--- %s - %s ---\n\n",
+					"--- %s — %s ---\n\n",
 					tags,
 					formatMillis(tagsData.duration),
 				)
-				for _, task := range tagsData.tasks {
-					fmt.Printf("* %s\n", task)
+				for description, duration := range tagsData.tasks {
+					if showDurationForEach {
+						fmt.Printf(
+							"* %s — %s\n",
+							description,
+							formatMillis(duration),
+						)
+					} else {
+						fmt.Printf("* %s\n", description)
+					}
 				}
 				fmt.Println()
 			}
@@ -112,9 +108,8 @@ func printReport(date string, report map[string]map[string]*Tags) {
 
 func composeReport(
 	timeEntries []toggl.DetailedTimeEntry,
-	doNotMergeEqual bool,
-) map[string]map[string]*Tags {
-	report := make(map[string]map[string]*Tags)
+) map[string]map[string]*TagsData {
+	report := make(map[string]map[string]*TagsData)
 	sort.Slice(timeEntries, func(i, j int) bool {
 		return timeEntries[i].Start.Before(*timeEntries[j].Start)
 	})
@@ -129,27 +124,21 @@ func composeReport(
 		if joinedTags == "" {
 			joinedTags = "No tags"
 		}
-		{
-			_, ok := report[project]
-			if !ok {
-				report[project] = make(map[string]*Tags)
+		_, ok := report[project]
+		if !ok {
+			report[project] = make(map[string]*TagsData)
+		}
+		_, ok = report[project][joinedTags]
+		if !ok {
+			report[project][joinedTags] = &TagsData{
+				duration: 0,
+				tasks:    make(map[string]int64),
 			}
 		}
-		{
-			_, ok := report[project][joinedTags]
-			if !ok {
-				report[project][joinedTags] = &Tags{
-					duration: 0,
-					tasks:    []string{},
-				}
-			}
-		}
-		if !contains(report[project][joinedTags].tasks, timeEntry.Description) ||
-			doNotMergeEqual {
-			report[project][joinedTags].tasks = append(
-				report[project][joinedTags].tasks,
-				timeEntry.Description,
-			)
+		_, ok = report[project][joinedTags].tasks[timeEntry.Description]
+		if !ok {
+			report[project][joinedTags].tasks[timeEntry.Description] =
+				timeEntry.Duration
 		}
 		report[project][joinedTags].duration += timeEntry.Duration
 	}
@@ -173,15 +162,15 @@ func main() {
 		"today",
 		"Report date (can be: \"today\", \"yesterday\", \"YYYY-MM-DD\")",
 	)
-	doNotMergeEqual := flag.Bool(
-		"doNotMergeEqual",
-		false,
-		"Do not merge tasks with equal descriptions",
-	)
 	printWorkspaces := flag.Bool(
 		"printWorkspaces",
 		false,
 		"Print workspaces instead of report",
+	)
+	showDurationForEach := flag.Bool(
+		"showDurationForEach",
+		false,
+		"Show duration for each task",
 	)
 	flag.Parse()
 	processedDate, err := processDate(*date)
@@ -206,7 +195,7 @@ func main() {
 		}
 		fmt.Print("Your workspaces:\n\n")
 		for _, workspace := range account.Data.Workspaces {
-			fmt.Printf("* %d - %s", workspace.ID, workspace.Name)
+			fmt.Printf("* %d — %s", workspace.ID, workspace.Name)
 		}
 		fmt.Println()
 		if !*printWorkspaces {
@@ -249,6 +238,6 @@ func main() {
 			timeEntries = append(timeEntries, rawReportPage.Data...)
 		}
 	}
-	report := composeReport(timeEntries, *doNotMergeEqual)
-	printReport(processedDate, report)
+	report := composeReport(timeEntries)
+	printReport(processedDate, report, *showDurationForEach)
 }
