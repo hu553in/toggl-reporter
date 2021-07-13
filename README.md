@@ -2,10 +2,8 @@
 
 ## Description
 
-This project is an app for creating custom daily reports
-based on the data from Toggl.\
-It is inspired by
-[senior-sigan/toggl-reporter](https://github.com/senior-sigan/toggl-reporter),
+This project is an app for creating custom daily reports based on the data from Toggl.\
+It is inspired by [senior-sigan/toggl-reporter](https://github.com/senior-sigan/toggl-reporter),
 but rewritten in Go for more customization and learning purposes.
 
 ## How to run
@@ -25,7 +23,7 @@ in case if you want to reinstall the app (you may need elevated privileges)
 
 * `-date` — a report date (can be: `today`, `yesterday`, `YYYY-MM-DD`)
 (default `today`)
-* `-doNotMergeEqual` - do not merge tasks with equal descriptions
+* `-doNotMergeEqual` — do not merge tasks with equal descriptions
 * `-printWorkspaces` — print workspaces instead of the report
 * `-showDurationForEach` — show duration for each task
 * `-token` — a Toggl API token (you can get it from your Toggl profile page)
