@@ -14,7 +14,7 @@ in case if you want to reinstall the app (you may need elevated privileges)
 3. Run the following sequence of commands:
     ```
     $ go get github.com/hu553in/toggl-reporter
-    $ go install github.com/hu553in/toggl-reporter@latest
+    $ go install github.com/hu553in/toggl-reporter
     # mv $(go env GOPATH)/bin/toggl-reporter /usr/local/bin/
     ```
 4. Run `toggl-reporter` with `--help` or some another CLI args
