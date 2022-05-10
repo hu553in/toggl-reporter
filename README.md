@@ -8,7 +8,7 @@ but rewritten in Go for more customization and learning purposes.
 
 ## How to run
 
-1. Install `Go` (≥ 1.15)
+1. Install Go (≥ 1.15)
 2. Run `rm -rf $(go env GOPATH)/**/github.com/hu553in/toggl-reporter && rm -rf /usr/local/bin/toggl-reporter`
 in case if you want to reinstall the app (you may need elevated privileges)
 3. Run the following sequence of commands:
