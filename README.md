@@ -6,6 +6,11 @@ This project is an app for creating custom daily reports based on the data from 
 It is inspired by [senior-sigan/toggl-reporter](https://github.com/senior-sigan/toggl-reporter), but rewritten in Go for
 more customization and learning purposes.
 
+## Roadmap
+
+- [ ] add a possibility to store `token` and `workspaceId` values in the configuration file
+- [ ] split the single source code file to several files
+
 ## How to run
 
 1. Install Go (≥ 1.15)
